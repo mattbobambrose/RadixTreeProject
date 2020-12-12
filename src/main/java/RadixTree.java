@@ -7,23 +7,19 @@ public class RadixTree {
 
     public static void main(String[] args) {
         RadixTree tree = new RadixTree();
-        tree.add("cat");
         tree.add("catastrophe");
+        tree.add("cat");
         tree.add("catatonic");
         System.out.println(tree.search("catatonic"));
-        System.out.println(tree);
         System.out.println(tree.stringsInTree());
+        System.out.println(tree.remove("cat"));
+        System.out.println(tree.stringsInTree());
+
     }
 
     //Adds a MashupNode to a radix tree
     public RadixTree add(String str) {
         this.root.add(str);
-        return this;
-    }
-
-    //Removes a MashupNode from a radix tree
-    public RadixTree remove(String str) {
-        this.root.remove(str);
         return this;
     }
 
@@ -43,6 +39,10 @@ public class RadixTree {
 
     public boolean contains(String word) {
         return search(word) != -1;
+    }
+
+    public int remove(String word) {
+        return this.root.remove(word);
     }
 
     @Override

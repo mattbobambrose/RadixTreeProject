@@ -25,12 +25,17 @@ public class MashupNode {
     public void add(String str) {
         for (Edge child : children) {
             int x = match(str, child.prefix);
+            // If they share a common prefix
             if (x != -1) {
+                // First suffix
                 String sub1 = child.prefix.substring(x + 1);
+                // Checks if prefix is the str
                 if (sub1.length() != 0)
                     child.node.add(sub1);
 
+                // Second suffix
                 String sub2 = str.substring(x + 1);
+                // Checks if prefix is the str
                 if (sub2.length() != 0)
                     child.node.add(sub2);
 
@@ -57,39 +62,54 @@ public class MashupNode {
         return -1;
     }
 
-    public void remove(String str) {
+    public int remove(String str) {
         for (Edge child : children) {
-            int x = match(str, child.prefix);
-            if (x != -1) {
-                String sub1 = child.prefix.substring(x + 1);
-                if (sub1.length() != 0)
-                    child.node.remove(sub1);
+            // If child is a match and is a word
+            if (str.equals(child.prefix) && child.isWord) {
+                // If child has no children
+                if (child.node.isEmpty()) {
+                    children.remove(child);
+                }
+                // If child has one child
+                else if (child.node.numChildren() == 1) {
+                    Edge grandchild = child.node.children.get(0);
+                    String childPre1 = child.prefix;
+                    String childPre2 = grandchild.prefix;
+                    child.isWord = grandchild.isWord;
+                    child.node = grandchild.node;
+                    child.prefix = childPre1 + childPre2;
 
-                String sub2 = str.substring(x + 1);
-                if (sub2.length() != 0)
-                    child.node.remove(sub2);
+                }
+                // If child has more than one child
+                else {
+                    child.isWord = false;
+                }
+                return child.node.id;
+            }
 
-                child.prefix = child.prefix.substring(0, x + 1);
-
-                child.isWord = sub1.length() == 0 || sub2.length() == 0;
-                return;
+            if (str.startsWith(child.prefix)) {
+                int retval = child.node.remove(str.substring(child.prefix.length()));
+                if (retval != -1)
+                    return retval;
             }
         }
-        children.remove(new Edge(str, new MashupNode(this.tree)));
+        return -1;
     }
 
     public boolean isEmpty() {
         return children.size() == 0;
     }
 
+    public int numChildren() {
+        return children.size();
+    }
 
     public void nodeStrings(List<String> list, String str, boolean isWord) {
-        if (isWord) {
+        if (isWord)
             list.add(str);
-        }
-        for (Edge child : children) {
+
+        for (Edge child : children)
             child.node.nodeStrings(list, str + child.prefix, child.isWord);
-        }
     }
 
     @Override

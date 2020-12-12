@@ -78,4 +78,23 @@ public class TreeTests {
             assertTrue(tree.contains(word));
         }
     }
+
+    @Test
+    public void treeTest6() {
+        TreeWrapper wrapper =
+                new TreeWrapper(new RadixTree())
+                        .add("ca")
+                        .add("cat")
+                        .add("can")
+                        .add("catatonic")
+                        .remove("cat");
+        RadixTree tree = wrapper.getTree();
+        List<String> result = tree.stringsInTree();
+        assertEquals(wrapper.getWordsAdded().size(), result.size());
+        System.out.println(tree.stringsInTree());
+        for (String word : wrapper.getWordsAdded()) {
+            assertTrue(result.contains(word));
+            assertTrue(tree.contains(word));
+        }
+    }
 }
