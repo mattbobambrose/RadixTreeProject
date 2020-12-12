@@ -1,6 +1,9 @@
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TreeTests {
 
@@ -24,7 +27,7 @@ public class TreeTests {
                         .add("catastrophe")
                         .add("catatonic")
                         .toString();
-        assertEquals(result, "[{'cat', t, [{'a', f, [{'tonic', t}, {'strophe', t}]}]}]");
+        assertEquals("[{'cat', t, [{'a', f, [{'tonic', t}, {'strophe', t}]}]}]", result);
     }
 
     @Test
@@ -34,7 +37,7 @@ public class TreeTests {
                         .add("cat")
                         .add("can")
                         .toString();
-        assertEquals(result, "[{'ca', f, [{'t', t}, {'n', t}]}]");
+        assertEquals("[{'ca', f, [{'t', t}, {'n', t}]}]", result);
     }
 
     @Test
@@ -44,6 +47,35 @@ public class TreeTests {
                         .add("ca")
                         .add("cat")
                         .add("can").toString();
-        assertEquals(result, "[{'ca', t, [{'t', t}, {'n', t}]}]");
+        assertEquals("[{'ca', t, [{'t', t}, {'n', t}]}]", result);
+    }
+
+    @Test
+    public void treeTest4() {
+        RadixTree tree =
+                new RadixTree()
+                        .add("ca")
+                        .add("cat")
+                        .add("can");
+        int result = tree.search("cat");
+        assertEquals(1, result);
+    }
+
+    @Test
+    public void treeTest5() {
+        TreeWrapper wrapper =
+                new TreeWrapper(new RadixTree())
+                        .add("ca")
+                        .add("cat")
+                        .add("can")
+                        .add("catatonic");
+        RadixTree tree = wrapper.getTree();
+        List<String> result = tree.stringsInTree();
+        assertEquals(wrapper.getWordsAdded().size(), result.size());
+        System.out.println(tree.stringsInTree());
+        for (String word : wrapper.getWordsAdded()) {
+            assertTrue(result.contains(word));
+            assertTrue(tree.contains(word));
+        }
     }
 }
