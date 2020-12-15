@@ -1,9 +1,9 @@
-public class Edge {
+class Edge {
     String prefix;
     boolean isWord = true;
     MashupNode node;
 
-    public Edge(String prefix, MashupNode node) {
+    Edge(String prefix, MashupNode node) {
         this.prefix = prefix;
         this.node = node;
     }

@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class MashupNode {
+class MashupNode {
     List<Edge> children = new ArrayList<>();
     RadixTree tree;
     int id;
 
-    public MashupNode(RadixTree tree) {
+    MashupNode(RadixTree tree) {
         this.tree = tree;
         id = this.tree.nextId();
     }
 
-    public static int match(String s1, String s2) {
+    // Calculates the length of the shared prefix of two words
+    static int prefixMatch(String s1, String s2) {
         String result = "";
         for (int i = 0; i < Math.min(s1.length(), s2.length()); i++) {
             if (s1.charAt(i) == s2.charAt(i))
@@ -22,9 +23,10 @@ public class MashupNode {
         return result.length() - 1;
     }
 
-    public void add(String str) {
+    // Adds a MashupNode to a radix tree
+    void add(String str) {
         for (Edge child : children) {
-            int x = match(str, child.prefix);
+            int x = prefixMatch(str, child.prefix);
             // If they share a common prefix
             if (x != -1) {
                 // First suffix
@@ -48,7 +50,8 @@ public class MashupNode {
         children.add(new Edge(str, new MashupNode(this.tree)));
     }
 
-    public int search(String str) {
+    // Searches for a MashupNode in a radix tree and returns where the node is
+    int search(String str) {
         for (Edge child : children) {
             if (str.equals(child.prefix) && child.isWord)
                 return child.node.id;
@@ -62,7 +65,8 @@ public class MashupNode {
         return -1;
     }
 
-    public int remove(String str) {
+    // Removes a string from a radix tree and returns its position
+    int remove(String str) {
         for (Edge child : children) {
             // If child is a match and is a word
             if (str.equals(child.prefix) && child.isWord) {
@@ -96,15 +100,18 @@ public class MashupNode {
         return -1;
     }
 
-    public boolean isEmpty() {
+    // Checks to see if node is a leaf node
+    boolean isEmpty() {
         return children.size() == 0;
     }
 
-    public int numChildren() {
+    // Returns the number of children
+    int numChildren() {
         return children.size();
     }
 
-    public void nodeStrings(List<String> list, String str, boolean isWord) {
+    // Modifies a list of strings by adding all words in a tree to the list
+    void nodeStrings(List<String> list, String str, boolean isWord) {
         if (isWord)
             list.add(str);
 

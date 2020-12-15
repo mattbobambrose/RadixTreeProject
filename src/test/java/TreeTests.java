@@ -9,14 +9,14 @@ public class TreeTests {
 
     @Test
     public void matchTest() {
-        assertEquals(MashupNode.match("cat", "dog"), -1);
-        assertEquals(MashupNode.match("cat", "can"), 1);
-        assertEquals(MashupNode.match("cat", "cat"), 2);
-        assertEquals(MashupNode.match("cat", "hat"), -1);
-        assertEquals(MashupNode.match("cat", "crtt"), 0);
-        assertEquals(MashupNode.match("cat", "c"), 0);
-        assertEquals(MashupNode.match("c", "cat"), 0);
-        assertEquals(MashupNode.match("", ""), -1);
+        assertEquals(MashupNode.prefixMatch("cat", "dog"), -1);
+        assertEquals(MashupNode.prefixMatch("cat", "can"), 1);
+        assertEquals(MashupNode.prefixMatch("cat", "cat"), 2);
+        assertEquals(MashupNode.prefixMatch("cat", "hat"), -1);
+        assertEquals(MashupNode.prefixMatch("cat", "crtt"), 0);
+        assertEquals(MashupNode.prefixMatch("cat", "c"), 0);
+        assertEquals(MashupNode.prefixMatch("c", "cat"), 0);
+        assertEquals(MashupNode.prefixMatch("", ""), -1);
     }
 
     @Test
@@ -70,9 +70,8 @@ public class TreeTests {
                         .add("can")
                         .add("catatonic");
         RadixTree tree = wrapper.getTree();
-        List<String> result = tree.stringsInTree();
+        List<String> result = tree.allStrings();
         assertEquals(wrapper.getWordsAdded().size(), result.size());
-        System.out.println(tree.stringsInTree());
         for (String word : wrapper.getWordsAdded()) {
             assertTrue(result.contains(word));
             assertTrue(tree.contains(word));
@@ -89,12 +88,25 @@ public class TreeTests {
                         .add("catatonic")
                         .remove("cat");
         RadixTree tree = wrapper.getTree();
-        List<String> result = tree.stringsInTree();
+        List<String> result = tree.allStrings();
+        assertEquals(result.size(), tree.getSize());
         assertEquals(wrapper.getWordsAdded().size(), result.size());
-        System.out.println(tree.stringsInTree());
         for (String word : wrapper.getWordsAdded()) {
             assertTrue(result.contains(word));
             assertTrue(tree.contains(word));
         }
+    }
+
+    @Test
+    public void treeTest7() {
+        RadixTree tree = new RadixTree().add("ca")
+                .add("cat")
+                .add("can")
+                .add("catatonic");
+        RadixTree tree2 = new RadixTree().add("ca")
+                .add("cat")
+                .add("can")
+                .add("catatonic");
+        assertTrue(RadixTree.matchTrees(tree, tree2));
     }
 }
