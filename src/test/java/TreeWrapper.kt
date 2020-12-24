@@ -1,31 +1,16 @@
-import java.util.ArrayList;
-import java.util.List;
+class TreeWrapper(val tree: RadixTree) {
+    val wordsAdded = mutableListOf<String>()
+    fun add(word: String) =
+        word.let {
+            wordsAdded.add(it)
+            tree.add(it)
+            this
+        }
 
-public class TreeWrapper {
-    private List<String> wordsAdded = new ArrayList<>();
-    private RadixTree tree;
-
-    public TreeWrapper(RadixTree tree) {
-        this.tree = tree;
-    }
-
-    public List<String> getWordsAdded() {
-        return wordsAdded;
-    }
-
-    public RadixTree getTree() {
-        return tree;
-    }
-
-    public TreeWrapper add(String word) {
-        wordsAdded.add(word);
-        tree.add(word);
-        return this;
-    }
-
-    public TreeWrapper remove(String word) {
-        wordsAdded.remove(word);
-        tree.remove(word);
-        return this;
-    }
+    fun remove(word: String) =
+        word.let {
+            wordsAdded.remove(it)
+            tree.remove(it)
+            this
+        }
 }
