@@ -1,8 +1,8 @@
 import kotlin.math.min
 
 internal class MashupNode(private var tree: RadixTree) {
+    private val id = tree.idCounter.getAndIncrement()
     private val children = mutableListOf<Edge>()
-    private val id by lazy { tree.nextId() }
 
     // Adds a MashupNode to a radix tree
     fun add(str: String) {
@@ -34,10 +34,12 @@ internal class MashupNode(private var tree: RadixTree) {
     // Searches for a MashupNode in a radix tree and returns where the node is
     fun search(str: String): Int {
         for (child in children) {
-            if (str == child.prefix && child.isWord) return child.node.id
+            if (str == child.prefix && child.isWord)
+                return child.node.id
             if (str.startsWith(child.prefix)) {
                 val retval = child.node.search(str.substring(child.prefix.length))
-                if (retval != -1) return retval
+                if (retval != -1)
+                    return retval
             }
         }
         return -1

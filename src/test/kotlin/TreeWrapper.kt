@@ -7,10 +7,14 @@ class TreeWrapper(val tree: RadixTree) {
             this
         }
 
+    operator fun plus(str: String) = add(str)
+
     fun remove(word: String) =
         word.let {
             wordsAdded.remove(it)
             tree.remove(it)
             this
         }
+
+    operator fun minus(str: String) = remove(str)
 }
